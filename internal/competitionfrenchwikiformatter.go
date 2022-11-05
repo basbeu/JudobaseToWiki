@@ -10,8 +10,8 @@ type CompetitionFrenchWikiFormatter struct{}
 func (f *CompetitionFrenchWikiFormatter) Format(competition Competition) string {
 	var out string
 
-	finalPoolFrenchVisitor := NewPoolFrenchWikiVisitor("2020", 8, formatFrenchWikiFinalContest)
-	poolFrenchVisitor := NewPoolFrenchWikiVisitor("2020", 8, formatFrenchWikiContest)
+	finalPoolFrenchVisitor := NewPoolFrenchWikiVisitor("2020", formatFrenchWikiFinalContest)
+	poolFrenchVisitor := NewPoolFrenchWikiVisitor("2020", formatFrenchWikiContest)
 
 	out += f.formatTitle("Résultats", 1)
 	out += f.formatTitle("Phase finale", 2) + "\n"
@@ -33,27 +33,29 @@ func (f *CompetitionFrenchWikiFormatter) Format(competition Competition) string 
 	}
 	out += repechage2Builder.build()
 
+	poolType := competition.GetPoolType()
+
 	out += f.formatTitle("Groupes", 2)
 	out += f.formatTitle("Groupe A", 3)
-	poolABuilder := newPoolFrenchWikiBuilder()
+	poolABuilder := newPoolFrenchWikiBuilder(poolType)
 	for _, contest := range competition.GetPoolA() {
 		poolABuilder.addContest(contest.Accept(poolFrenchVisitor))
 	}
 	out += poolABuilder.build()
 	out += f.formatTitle("Groupe B", 3)
-	poolBBuilder := newPoolFrenchWikiBuilder()
+	poolBBuilder := newPoolFrenchWikiBuilder(poolType)
 	for _, contest := range competition.GetPoolB() {
 		poolBBuilder.addContest(contest.Accept(poolFrenchVisitor))
 	}
 	out += poolBBuilder.build()
 	out += f.formatTitle("Groupe C", 3)
-	poolCBuilder := newPoolFrenchWikiBuilder()
+	poolCBuilder := newPoolFrenchWikiBuilder(poolType)
 	for _, contest := range competition.GetPoolC() {
 		poolCBuilder.addContest(contest.Accept(poolFrenchVisitor))
 	}
 	out += poolCBuilder.build()
 	out += f.formatTitle("Groupe D", 3)
-	poolDBuilder := newPoolFrenchWikiBuilder()
+	poolDBuilder := newPoolFrenchWikiBuilder(poolType)
 	for _, contest := range competition.GetPoolD() {
 		poolDBuilder.addContest(contest.Accept(poolFrenchVisitor))
 	}
@@ -121,9 +123,9 @@ type poolFrenchWikiBuilder struct {
 	pool string
 }
 
-func newPoolFrenchWikiBuilder() *poolFrenchWikiBuilder {
+func newPoolFrenchWikiBuilder(poolType int) *poolFrenchWikiBuilder {
 	return &poolFrenchWikiBuilder{
-		pool: "{{8TeamBracket-Compact-NoSeeds-Byes\n| RD1=Premier tour\n| RD2=Deuxième tour\n| RD3=Quarts de finale\n\n|team-width=200\n|score-width=20\n",
+		pool: "{{" + fmt.Sprint(poolType) + "TeamBracket-Compact-NoSeeds-Byes\n| RD1=Premier tour\n| RD2=Deuxième tour\n| RD3=Quarts de finale\n\n|team-width=200\n|score-width=20\n",
 	}
 }
 

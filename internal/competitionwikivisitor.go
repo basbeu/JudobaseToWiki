@@ -8,14 +8,12 @@ import (
 
 type poolFrenchWikiVisitor struct {
 	year          string
-	poolType      int
 	formatContest func(round int, teamWhite int, white string, blue string, scoreWhite string, scoreBlue string) string
 }
 
-func NewPoolFrenchWikiVisitor(year string, poolType int, formatContest func(round int, teamWhite int, white string, blue string, scoreWhite string, scoreBlue string) string) CompetitionVisitor {
+func NewPoolFrenchWikiVisitor(year string, formatContest func(round int, teamWhite int, white string, blue string, scoreWhite string, scoreBlue string) string) CompetitionVisitor {
 	return &poolFrenchWikiVisitor{
 		year:          year,
-		poolType:      poolType,
 		formatContest: formatContest,
 	}
 }

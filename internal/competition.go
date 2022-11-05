@@ -113,6 +113,10 @@ func NewCompetition(judobaseComp judobase.Competition) Competition {
 	}
 }
 
+func (c *Competition) GetPoolType() int {
+	return int(math.Pow(2.0, float64(c.mainDrawHeight-2)))
+}
+
 func (c *Competition) GetPoolA() []Contest {
 	return c.getPool(0)
 }
